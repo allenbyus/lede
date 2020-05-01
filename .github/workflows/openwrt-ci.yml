@@ -50,7 +50,11 @@ jobs:
           ./scripts/feeds install -a
 
       - name: Generate configuration file
-        run: make defconfig
+        run: |
+          rm -rf ./.config*
+          wget -O .config https://raw.githubusercontent.com/allenbyus/shell-script/master/openwrt-make-config/xiaomir3g.config
+          sleep 10s
+          make defconfig
 
       - name: Make download
         run: |
@@ -83,7 +87,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -95,7 +99,7 @@ jobs:
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bin/targets/*/*/

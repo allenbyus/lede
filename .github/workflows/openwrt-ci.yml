@@ -50,6 +50,11 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
+      - name: Make Clear
+        run: |
+          make clean
+          make V=99
+
       - name: Generate configuration file
         run: |
           rm -rf ./.config*
